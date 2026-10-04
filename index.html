@@ -1,0 +1,271 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>فواتير مياه الباطنه</title>
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0a6fb8"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#f3f6f9;--cd:#fff;--tx:#17252f;--mu:#667785;--ac:#0a6fb8;--bd:#d3dce4;--ok:#17874a;--er:#c0392b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161c;--cd:#19222b;--tx:#e8eef3;--mu:#94a2af;--ac:#4aa8ee;--bd:#2b3844}}
+:root[data-theme="dark"]{--bg:#0f161c;--cd:#19222b;--tx:#e8eef3;--mu:#94a2af;--ac:#4aa8ee;--bd:#2b3844}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px Tajawal,Tahoma,Arial,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--ac);color:#fff;padding:10px 12px;z-index:5}
+header h1{margin:0;font-size:17px}header small{opacity:.9}
+.bar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px}
+button,input{font:inherit}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:8px 12px;cursor:pointer}
+button.g{background:transparent;color:var(--ac);border:1px solid var(--ac)}button.w{background:#1fa855}button.d{background:var(--er)}
+input{border:1px solid var(--bd);border-radius:8px;padding:8px;background:var(--cd);color:var(--tx);width:100%;box-sizing:border-box}
+.sum{display:flex;gap:6px;padding:0 12px}.sum div{flex:1;background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:8px;text-align:center}.sum b{display:block;font-size:16px}.sum span{color:var(--mu);font-size:12px}
+#list{padding:8px 12px 40px}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:10px;margin-bottom:8px}
+.c h3{margin:0 0 6px;font-size:15px}.c h3 span{color:var(--mu);font-weight:400}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:12px;color:var(--mu)}.g3 b{display:block;color:var(--tx);font-size:15px;padding:6px 0}
+.row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.row button{flex:1;padding:8px 4px;font-size:13px}
+.warn{color:var(--er);font-size:12px}
+#md{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:9}
+#md>div{background:var(--cd);width:100%;max-width:520px;max-height:88%;overflow:auto;border-radius:16px 16px 0 0;padding:14px;box-sizing:border-box;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+label{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px}
+.pl{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd)}
+#stage{position:fixed;left:-10000px;top:0;width:780px}
+.inv{width:780px;display:flex;gap:8px;background:#fff;color:#000;padding:8px;box-sizing:border-box;font:13px Tajawal,Tahoma,Arial,sans-serif;direction:rtl}
+.inv .mn{flex:1;border:1.5px solid #000}.inv .sl{width:190px;border:1.5px solid #000;border-right:2px dashed #000}
+.inv .ih{display:flex;border-bottom:1.5px solid #000;font-weight:700;text-align:center}.inv .ih span,.inv .ih b{padding:4px;flex:1}.inv .ih span{border-left:1.5px solid #000;flex:0 0 22%}
+.inv .ir{display:flex;justify-content:space-between;padding:4px 6px;border-bottom:1.5px solid #000;gap:6px}
+.inv table{border-collapse:collapse;width:100%;text-align:center}.inv th,.inv td{border:1px solid #000;padding:3px 1px;font-size:11px}.inv .v td{font-size:14px;padding:9px 1px}
+.inv .nt{padding:4px;font-size:11px;border-top:1.5px solid #000}.inv .st{padding:4px 8px 14px;font-size:11px}
+.inv .sl>div{padding:3px 6px;text-align:center}
+#au{position:fixed;inset:0;z-index:99;background:var(--bg);display:none;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;overflow:auto}
+#au form{background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:18px;width:100%;max-width:380px}
+#au h2{margin:0 0 4px;font-size:18px}#au p{color:var(--mu);font-size:13px;margin:4px 0 8px}#au button[type=submit]{width:100%;margin-top:12px}
+#ae{color:var(--er);font-size:13px;min-height:18px;margin-top:8px}.lk>header,.lk>.bar,.lk>.sum,.lk>#list{display:none}
+#ts{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 14px;border-radius:10px;z-index:120;max-width:90%;display:none;font-size:13px;text-align:center}
+textarea{font:inherit}</style></head><body>
+<header><h1>مشروع الباطنه لمياه الشرب</h1><small id="mt"></small> <small id="cs" style="margin-inline-start:8px"></small></header>
+<div class="bar"><input id="q" placeholder="بحث بالاسم أو الرقم" style="flex:1 1 100%"><button data-a="newm">فواتير شهر جديد</button><button data-a="add" class="g">+ عميل</button><button data-a="all" class="g">PDF للكل</button><button data-a="set" class="g">⚙</button><button data-a="lock" class="g">🔒</button></div>
+<div class="sum"><div><b id="s1"></b><span>إجمالي المطلوب</span></div><div><b id="s2"></b><span>المحصّل هذا الشهر</span></div><div><b id="s3"></b><span>المتبقي</span></div></div>
+<div id="list"></div><div id="au"></div><div id="ts"></div><div id="md"><div id="mb"></div></div><div id="stage"></div>
+<script>
+const SEED=[];
+const KEY='water_app_v1',MN=['يناير','فبراير','مارس','ابريل','مايو','يونيو','يوليو','اغسطس','سبتمبر','اكتوبر','نوفمبر','ديسمبر'];
+const $=i=>document.getElementById(i),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),r2=x=>Math.round(x*100)/100,fm=x=>r2(x).toLocaleString('en');
+const AK='water_enc_v1',FK='water_fail',FBK='water_fb',BKN=8,CBKN=30,DEV=Math.random().toString(36).slice(2,10),enc=new TextEncoder(),dec=new TextDecoder();
+const fresh=()=>({cfg:{title:'مشروع الباطنه لمياه الشرب',p1:500,p2:1200,allow:1.5,cc:'967'},month:'اغسطس',year:2026,c:SEED.map((x,i)=>({id:i+1,...x})),pays:[],hist:[]});
+let S=null,KEYC=null,SALT=null,UNAME='',EM='',chain=Promise.resolve();
+let FU=null,DB=null,REV=0,DIRTY=false,CHG=0,AUTHPW='',UNSUB=null,pushT=null,snapT=null,retryT=null,pushing=false;
+const b64=u=>{let s='';new Uint8Array(u).forEach(x=>s+=String.fromCharCode(x));return btoa(s)};
+const unb=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+const getFB=()=>{try{return JSON.parse(localStorage.getItem(FBK))}catch(e){return null}};
+const setCS=t=>{const e=$('cs');if(e)e.textContent=t};
+function toast(m){const e=$('ts');if(!e)return;e.textContent=m;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',7000)}
+async function derive(pw,salt){const m=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+ return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'},m,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function authSecret(pw,email){const m=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveBits']);
+ return hex(await crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode('water-auth|'+email.toLowerCase()),iterations:100000,hash:'SHA-256'},m,256))}
+async function encObj(o){const iv=crypto.getRandomValues(new Uint8Array(12));return{i:b64(iv),d:b64(await crypto.subtle.encrypt({name:'AES-GCM',iv},KEYC,enc.encode(JSON.stringify(o))))}}
+async function decObj(x){return JSON.parse(dec.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:unb(x.i)},KEYC,unb(x.d))))}
+async function seal(){if(!KEYC||!S)return;const x=await encObj(S);localStorage.setItem(AK,JSON.stringify({v:2,u:UNAME,e:EM,s:b64(SALT),i:x.i,d:x.d,rv:REV,dy:DIRTY?1:0}))}
+const persist=()=>{chain=chain.then(seal).catch(()=>{});return chain};
+const save=()=>{if(!KEYC)return;DIRTY=true;CHG++;persist();clearTimeout(snapT);snapT=setTimeout(snapLocal,3000);schedPush()};
+// ---- نسخ احتياطية محلية دوّارة (آخر 8) ----
+async function snapLocal(){if(!KEYC||!S)return;try{const n=(+localStorage.getItem('water_bn')||0)+1,{hist,...st}=S,x=await encObj(st);
+ localStorage.setItem('water_bk_'+n%BKN,JSON.stringify({t:Date.now(),n,...x}));localStorage.setItem('water_bn',n)}catch(e){}}
+const clearSnaps=()=>{for(let i=0;i<BKN;i++)localStorage.removeItem('water_bk_'+i)};
+async function tryOpen(pw){const r=JSON.parse(localStorage.getItem(AK)),salt=unb(r.s),k=await derive(pw,salt);
+ const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb(r.i)},k,unb(r.d));return{r,salt,k,st:JSON.parse(dec.decode(pt))}}
+async function unlock(u,pw){const r=JSON.parse(localStorage.getItem(AK)),un=String(u).trim();
+ if(un!==r.u&&un.toLowerCase()!==(r.e||'\0')){await derive(pw,unb(r.s));throw new Error('bad')}
+ const o=await tryOpen(pw);S=o.st;KEYC=o.k;SALT=o.salt;UNAME=o.r.u;EM=o.r.e||'';REV=o.r.rv||0;DIRTY=!!o.r.dy;CHG=0}
+async function setup(u,pw){SALT=crypto.getRandomValues(new Uint8Array(16));KEYC=await derive(pw,SALT);UNAME=String(u).trim();EM='';REV=0;DIRTY=false;CHG=0;
+ let old=null;try{old=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ S=old&&old.c?old:fresh();await seal();localStorage.removeItem(KEY)}
+async function changePw(oldPw,newPw){await tryOpen(oldPw);await chain;SALT=crypto.getRandomValues(new Uint8Array(16));KEYC=await derive(newPw,SALT);clearSnaps();await seal()}
+// ---- المزامنة السحابية (Firebase) ----
+function loadScript(u){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>no(new Error('load'));document.head.appendChild(s)})}
+async function loadFB(cfg){if(!window.firebase){const b='https://www.gstatic.com/firebasejs/10.12.2/';await loadScript(b+'firebase-app-compat.js');await Promise.all([loadScript(b+'firebase-auth-compat.js'),loadScript(b+'firebase-firestore-compat.js')])}
+ if(!firebase.apps.length)firebase.initializeApp(cfg)}
+function parseCfg(t){const o={};String(t).replace(/["']?(\w+)["']?\s*:\s*["']([^"']*)["']/g,(m,k,v)=>{o[k]=v});if(!o.apiKey||!o.projectId)throw new Error('cfg');return o}
+const mainPath=()=>`users/${FU.uid}/data/main`;
+async function adopt(d){S=await decObj(d);REV=d.rev;DIRTY=false;CHG=0;await persist();render()}
+const schedPush=()=>{if(!getFB()||!FU)return;clearTimeout(pushT);pushT=setTimeout(push,1500)};
+async function cloudSnap(nr){try{const {hist,...st}=S,x=await encObj(st);await DB.doc(`users/${FU.uid}/bk/s${nr%CBKN}`).set({rev:nr,t:Date.now(),...x})}catch(e){}}
+async function push(){if(!FU||!KEYC||!S||pushing)return;pushing=true;setCS('⏳ مزامنة...');
+ try{await chain;const my=CHG,x=await encObj(S),ref=DB.doc(mainPath());let nr;
+  await DB.runTransaction(async tx=>{const d=await tx.get(ref),r=d.exists?d.data().rev:0;if(r>REV)throw{conflict:d.data()};nr=Math.max(r,REV)+1;tx.set(ref,{rev:nr,t:Date.now(),dev:DEV,u:UNAME,s:b64(SALT),...x})});
+  REV=nr;if(CHG===my)DIRTY=false;await persist();setCS(DIRTY?'⏳ مزامنة...':'☁ متزامن');cloudSnap(nr);if(DIRTY)schedPush();
+ }catch(e){if(e&&e.conflict){await snapLocal();try{await adopt(e.conflict);toast('تم تحديث البيانات من جهاز آخر. نسختك السابقة محفوظة ضمن النسخ التلقائية.');setCS('☁ متزامن')}catch(x){setCS('⚠ تعذر قراءة البيانات السحابية')}}
+  else{setCS('⚠ غير متصل — ستُعاد المحاولة');clearTimeout(retryT);retryT=setTimeout(push,30000)}}
+ finally{pushing=false}}
+function listen(){if(UNSUB)UNSUB();UNSUB=DB.doc(mainPath()).onSnapshot(async s=>{if(!s.exists||s.metadata.hasPendingWrites)return;const d=s.data();if(d.dev===DEV||d.rev<=REV)return;
+ try{if(DIRTY)await snapLocal();await adopt(d);setCS('☁ تم التحديث من جهاز آخر')}catch(e){setCS('⚠ تعذر قراءة البيانات السحابية')}},()=>setCS('⚠ غير متصل'))}
+async function startCloud(){const f=getFB();if(!f||!KEYC||!AUTHPW)return;setCS('⏳ اتصال...');
+ try{await loadFB(f.cfg);FU=(await firebase.auth().signInWithEmailAndPassword(f.email,AUTHPW)).user;DB=firebase.firestore();
+  const s=await DB.doc(mainPath()).get();
+  if(s.exists&&s.data().rev>REV){if(DIRTY)await snapLocal();await adopt(s.data())}
+  listen();setCS('☁ متزامن');if(DIRTY||!s.exists)push()}
+ catch(e){FU=null;setCS('⚠ غير متصل — ستُعاد المحاولة');clearTimeout(retryT);retryT=setTimeout(startCloud,30000)}}
+async function enableCloud(cfg,email,pw,replace){await tryOpen(pw);await loadFB(cfg);const ap=await authSecret(pw,email);let cred;
+ try{cred=await firebase.auth().createUserWithEmailAndPassword(email,ap)}catch(e){if(e&&e.code==='auth/email-already-in-use')cred=await firebase.auth().signInWithEmailAndPassword(email,ap);else throw e}
+ FU=cred.user;DB=firebase.firestore();AUTHPW=ap;const s=await DB.doc(mainPath()).get();
+ if(s.exists){if(!replace){await firebase.auth().signOut();FU=null;DB=null;AUTHPW='';return'exists'}REV=s.data().rev;await snapLocal()}
+ localStorage.setItem(FBK,JSON.stringify({cfg,email}));EM=email;DIRTY=true;CHG++;await persist();listen();await push();return'ok'}
+async function joinCloud(cfg,email,pw){await loadFB(cfg);const ap=await authSecret(pw,email),cred=await firebase.auth().signInWithEmailAndPassword(email,ap);
+ const db=firebase.firestore(),s=await db.doc(`users/${cred.user.uid}/data/main`).get();if(!s.exists)throw new Error('nodoc');
+ const d=s.data();SALT=unb(d.s);KEYC=await derive(pw,SALT);S=await decObj(d);UNAME=d.u||email;EM=email;REV=d.rev;DIRTY=false;CHG=0;
+ localStorage.setItem(FBK,JSON.stringify({cfg,email}));await seal();FU=cred.user;DB=db;AUTHPW=ap}
+function stopCloud(){try{if(UNSUB)UNSUB()}catch(e){}UNSUB=null;clearTimeout(pushT);clearTimeout(retryT);FU=null;DB=null}
+
+const pend=c=>c.cur===''||c.cur==null;
+function calc(c){const p=S.cfg,q=pend(c)?0:(+c.cur||0)-(+c.prev||0),A=c.fam*p.allow;
+ const f=q<=A?q*p.p1:A*p.p1,g=q<=A?0:(q-A)*p.p2,i=f+g+(+c.fee||0);return{q,A,f,g,i,tot:r2(i+(+c.arr||0)+(+c.fine||0))}}
+const paidOf=c=>S.pays.filter(p=>p.cid===c.id).reduce((a,p)=>a+p.amt,0);
+function inv(c){const k=calc(c),p=S.cfg,m=S.month+' '+S.year;
+return `<div class="inv"><div class="mn"><div class="ih"><span>فاتورة المياه</span><b>${esc(p.title)}</b></div>
+<div class="ir"><span>اسم المستفيد / ${esc(c.name)}</span><span>رقم حساب ${c.n}</span><span>افراد الاسرة ${c.fam}</span><span>فاتورة ${m}</span></div>
+<table><tr><th colspan=2>قراءة العداد</th><th rowspan=2>كمية<br>الاستهلاك</th><th>بسعر</th><th>بسعر</th><th rowspan=2>رسوم<br>خدمة</th><th rowspan=2>قيمة<br>الاستهلاك</th><th rowspan=2>متأخرات</th><th rowspan=2>الغرامة</th><th rowspan=2>مدفوعات<br>الشهر السابق</th><th rowspan=2>المبلغ<br>المطلوب</th></tr>
+<tr><th>السابقة</th><th>الحالية</th><th>${p.p1}</th><th>${p.p2}</th></tr>
+<tr class="v"><td>${c.prev}</td><td>${pend(c)?'':c.cur}</td><td>${r2(k.q)}</td><td>${fm(k.f)}</td><td>${k.g?fm(k.g):'صفر'}</td><td>${fm(c.fee)}</td><td>${fm(k.i)}</td><td>${fm(c.arr)}</td><td>${fm(c.fine)}</td><td>${fm(c.paid)}</td><td><b>${fm(k.tot)}</b></td></tr></table>
+<div class="nt">اخي المستفيد // سارع بتسديد ما عليك من مديونية وذلك لتفادي قطع الماء عليك</div><div class="st">الختم /</div></div>
+<div class="sl"><div class="ih" style="display:block">قسيمة التحصيل</div><div>${m}</div><div>${esc(c.name)} — ${c.n}</div>
+<table><tr><th>قيمة الاستهلاك</th><td>${fm(k.i)}</td></tr><tr><th>المتأخرات</th><td>${fm(c.arr)}</td></tr><tr><th>الغرامة</th><td>${fm(c.fine)}</td></tr><tr><th>المبلغ المطلوب</th><td><b>${fm(k.tot)}</b></td></tr></table></div></div>`}
+async function pdfFor(list,prog){const{jsPDF}=window.jspdf,pdf=new jsPDF({unit:'mm',format:'a4'}),st=$('stage');await document.fonts.ready;
+ for(let i=0;i<list.length;i++){st.innerHTML=inv(list[i]);const cv=await html2canvas(st.firstChild,{scale:2,backgroundColor:'#fff'}),w=190,h=w*cv.height/cv.width,s=i%4;
+  if(i&&!s)pdf.addPage();const y=10+s*(h+9);pdf.addImage(cv.toDataURL('image/jpeg',.9),'JPEG',10,y,w,h);
+  if(s<3&&i<list.length-1){pdf.setLineDashPattern([2,2],0);pdf.line(10,y+h+4.5,200,y+h+4.5)}if(prog)prog(i+1,list.length)}
+ st.innerHTML='';return pdf.output('blob')}
+function saveBlob(b,name){const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
+function phone(c){let p=String(c.phone||'').replace(/\D/g,'');if(p.startsWith('00'))p=p.slice(2);else if(p.startsWith('0'))p=S.cfg.cc+p.slice(1);return p}
+function wa(c,t){const a=document.createElement('a');a.href='https://wa.me/'+phone(c)+'?text='+encodeURIComponent(t);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+const invMsg=c=>`${S.cfg.title}\nفاتورة شهر ${S.month} ${S.year}\nالمشترك: ${c.name}\nالمبلغ المطلوب: ${fm(calc(c).tot)}`;
+async function shareInv(c,btn){if(pend(c)&&!confirm('لم تُدخل القراءة الحالية لهذا العميل. متابعة؟'))return;const t=btn.textContent;btn.textContent='...';
+ try{const b=await pdfFor([c]),f=new File([b],`فاتورة ${c.n} ${c.name}.pdf`,{type:'application/pdf'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:invMsg(c)});return}catch(e){if(e.name==='AbortError')return}}
+  await saveBlob(b,f.name);wa(c,invMsg(c))}finally{btn.textContent=t}}
+const cardOf=c=>`<div class="c" data-id="${c.id}" data-s="${esc(c.name)} ${c.n}"><h3>${c.n}. ${esc(c.name)} <span>(${c.fam} أفراد)</span></h3>
+<div class="g3"><div>القراءة السابقة<b>${c.prev}</b></div><div>القراءة الحالية<input type="number" inputmode="decimal" data-f="cur" value="${pend(c)?'':c.cur}"></div><div>الغرامة<input type="number" inputmode="decimal" data-f="fine" value="${c.fine||''}"></div>
+<div>المتأخرات<b>${fm(c.arr)}</b></div><div>المدفوع هذا الشهر<b data-o="pd"></b></div><div>المطلوب<b data-o="tot"></b></div></div><div class="warn" data-o="w"></div>
+<div class="row"><button data-a="pdf" class="g">PDF</button><button data-a="wa" class="w">واتساب</button><button data-a="pay" class="g">+ دفعة</button><button data-a="edit" class="g">تعديل</button></div></div>`;
+function upd(el){const c=S.c.find(x=>x.id==el.dataset.id),k=calc(c),o=n=>el.querySelector(`[data-o=${n}]`);
+ o('tot').textContent=fm(k.tot);o('pd').textContent=fm(paidOf(c));o('w').textContent=pend(c)?'لم تُدخل القراءة الحالية':(k.q<0?'تنبيه: القراءة الحالية أقل من السابقة':'')}
+function sums(){let t=0,p=0;S.c.forEach(c=>{t+=calc(c).tot;p+=paidOf(c)});$('s1').textContent=fm(t);$('s2').textContent=fm(p);$('s3').textContent=fm(t-p)}
+function render(){$('mt').textContent=`فواتير شهر ${S.month} ${S.year}`;$('list').innerHTML=S.c.length?S.c.map(cardOf).join(''):'<p style="text-align:center;color:var(--mu);padding:30px 10px">لا يوجد عملاء بعد.<br>اضغط ⚙ ← استرجاع نسخة لتحميل ملف البيانات، أو أضف عميلاً بزر + عميل.</p>';document.querySelectorAll('.c').forEach(upd);sums();filt()}
+function filt(){const q=$('q').value.trim();document.querySelectorAll('.c').forEach(e=>e.style.display=!q||e.dataset.s.includes(q)?'':'none')}
+$('q').oninput=filt;
+const md=h=>{$('mb').innerHTML=h;$('md').style.display='flex'},cl=()=>{$('md').style.display='none'};
+$('md').onclick=e=>{if(e.target.id==='md')cl()};
+document.addEventListener('change',e=>{const f=e.target.dataset.f;if(!f)return;const el=e.target.closest('.c'),c=S.c.find(x=>x.id==el.dataset.id);
+ c[f]=e.target.value===''?(f==='cur'?'':0):+e.target.value;save();upd(el);sums()});
+const fld=(l,id,v,t='text')=>`<label>${l}</label><input id="${id}" type="${t}" value="${esc(v)}">`;
+function payUI(c,sent){const ps=S.pays.filter(p=>p.cid===c.id),tot=calc(c).tot,pd=paidOf(c);
+ md(`<h3>دفعات ${esc(c.name)}</h3>${fld('المبلغ','pa','','number')}${fld('التاريخ','pdt',new Date().toISOString().slice(0,10),'date')}
+ <div class="row"><button data-a="pok" data-id="${c.id}">تسجيل الدفعة</button><button class="g" data-a="x">إغلاق</button></div>
+ <h4>دفعات هذا الشهر (${fm(pd)}) — المتبقي ${fm(tot-pd)}</h4>${ps.map(p=>`<div class="pl"><span>${p.date} — ${fm(p.amt)}</span><span>${sent===p.id?`<button class="w" data-a="pwa" data-id="${c.id}" data-p="${p.id}">رسالة واتساب</button> `:''}<button class="d" data-a="pdel" data-id="${c.id}" data-p="${p.id}">حذف</button></span></div>`).join('')||'<div class="warn" style="color:var(--mu)">لا توجد دفعات</div>'}`)}
+const payMsg=(c,p)=>`${S.cfg.title}\nتم استلام مبلغ ${fm(p.amt)} من المشترك ${c.name} بتاريخ ${p.date}.\nإجمالي ما سُدّد هذا الشهر: ${fm(paidOf(c))}\nالمتبقي: ${fm(calc(c).tot-paidOf(c))}`;
+function editUI(c){const n=!c;c=c||{n:Math.max(0,...S.c.map(x=>x.n))+1,name:'',phone:'',fam:0,fee:500,prev:0,arr:0};window._ec=c;
+ md(`<h3>${n?'عميل جديد':'تعديل العميل'} (رقم ${c.n})</h3>${fld('الاسم','en',c.name)}${fld('رقم الواتساب (مثال 9677xxxxxxx)','ep',c.phone,'tel')}${fld('عدد أفراد الأسرة','ef',c.fam,'number')}${fld('رسوم الخدمة','ee',c.fee,'number')}${fld('القراءة السابقة','er',c.prev,'number')}${fld('المتأخرات','ea',c.arr,'number')}
+ <div class="row"><button data-a="eok" data-new="${n?1:0}">حفظ</button>${n?'':`<button class="d" data-a="edel">حذف العميل</button>`}<button class="g" data-a="x">إلغاء</button></div>`)}
+function newUI(){const i=MN.indexOf(S.month),m=MN[(i+1)%12],y=i===11?S.year+1:S.year;
+ md(`<h3>فواتير شهر جديد</h3><p style="color:var(--mu)">القراءة الحالية ← السابقة، والمتأخرات = إجمالي الشهر − المدفوعات، وتُرحَّل المدفوعات إلى خانة «مدفوعات الشهر السابق». ثم تكتب القراءات والغرامة.</p>${fld('الشهر','nm',m)}${fld('السنة','ny',y,'number')}<div class="row"><button data-a="nok">ترحيل وبدء الشهر</button><button class="g" data-a="x">إلغاء</button></div>`)}
+function setUI(){const p=S.cfg;md(`<h3>الإعدادات</h3>${fld('اسم المشروع','sn',p.title)}${fld('سعر الوحدة (ضمن المسموح)','s1v',p.p1,'number')}${fld('سعر الوحدة (الزيادة)','s2v',p.p2,'number')}${fld('المسموح لكل فرد','sa',p.allow,'number')}${fld('رمز الدولة للأرقام التي تبدأ بصفر','sc',p.cc)}
+ <div class="row"><button data-a="sok">حفظ</button><button class="g" data-a="bk">نسخة احتياطية</button><button class="g" data-a="pw">تغيير كلمة المرور</button><button class="g" data-a="cl">المزامنة السحابية</button><button class="g" data-a="bks">النسخ التلقائية</button><button class="g" data-a="rs">استرجاع نسخة</button><button class="d" data-a="undo">تراجع عن آخر ترحيل</button></div><input type="file" id="fi" accept=".json" style="display:none">`);
+ $('fi').onchange=async e=>{try{const j=JSON.parse(await e.target.files[0].text());if(!j.c)throw 0;S=j;save();cl();render()}catch(x){alert('ملف غير صالح')}}}
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,el=b.closest('.c'),id=+(b.dataset.id||(el&&el.dataset.id)),c=S.c.find(x=>x.id===id),V=i=>$(i).value;
+ if(a==='x')cl();
+ else if(a==='pdf'){b.textContent='...';const f=await pdfFor([c]);b.textContent='PDF';saveBlob(f,`فاتورة ${c.n} ${c.name} ${S.month} ${S.year}.pdf`)}
+ else if(a==='wa')shareInv(c,b);
+ else if(a==='pay')payUI(c);
+ else if(a==='pok'){const m=+V('pa');if(!(m>0))return alert('اكتب مبلغاً صحيحاً');const p={id:Date.now(),cid:id,amt:m,date:V('pdt')};S.pays.push(p);save();payUI(c,p.id);upd(document.querySelector(`.c[data-id="${id}"]`));sums()}
+ else if(a==='pwa')wa(c,payMsg(c,S.pays.find(p=>p.id==b.dataset.p)));
+ else if(a==='pdel'){if(!confirm('حذف هذه الدفعة؟'))return;S.pays=S.pays.filter(p=>p.id!=b.dataset.p);save();payUI(c);upd(document.querySelector(`.c[data-id="${id}"]`));sums()}
+ else if(a==='edit')editUI(c);else if(a==='add')editUI();
+ else if(a==='eok'){const o=window._ec;Object.assign(o,{name:V('en').trim(),phone:V('ep'),fam:+V('ef'),fee:+V('ee'),prev:+V('er'),arr:+V('ea')});if(!o.name)return alert('اكتب الاسم');
+  if(b.dataset.new==='1'){Object.assign(o,{id:Date.now(),cur:'',fine:0,paid:0});S.c.push(o)}save();cl();render()}
+ else if(a==='edel'){if(confirm('حذف العميل نهائياً؟')){S.c=S.c.filter(x=>x!==window._ec);save();cl();render()}}
+ else if(a==='newm')newUI();
+ else if(a==='nok'){S.hist.push({month:S.month,year:S.year,c:JSON.parse(JSON.stringify(S.c)),pays:S.pays});
+  S.c.forEach(c=>{const pd=paidOf(c),t=calc(c).tot;c.arr=r2(t-pd);c.paid=pd;if(!pend(c))c.prev=c.cur;c.cur='';c.fine=0});S.pays=[];S.month=V('nm');S.year=+V('ny');save();cl();render();scrollTo(0,0)}
+ else if(a==='all'){const s=b.textContent;const f=await pdfFor(S.c,(i,n)=>b.textContent=`${i}/${n}`);b.textContent=s;saveBlob(f,`فواتير ${S.month} ${S.year}.pdf`)}
+ else if(a==='set')setUI();
+ else if(a==='sok'){Object.assign(S.cfg,{title:V('sn'),p1:+V('s1v'),p2:+V('s2v'),allow:+V('sa'),cc:V('sc')});save();cl();render()}
+ else if(a==='bk')saveBlob(new Blob([JSON.stringify(S)],{type:'application/json'}),`نسخة-فواتير-${S.month}-${S.year}.json`);
+ else if(a==='rs')$('fi').click();
+ else if(a==='undo'){const h=S.hist.pop();if(!h)return alert('لا يوجد ترحيل سابق');if(!confirm('استرجاع حالة شهر '+h.month+'؟'))return S.hist.push(h);S.month=h.month;S.year=h.year;S.c=h.c;S.pays=h.pays;save();cl();render()}});
+
+const failGet=()=>{try{return JSON.parse(localStorage.getItem(FK))||{n:0,until:0}}catch(e){return{n:0,until:0}}};
+const TA='style="width:100%;box-sizing:border-box;border:1px solid var(--bd);border-radius:8px;padding:8px;background:var(--cd);color:var(--tx);font:12px monospace;direction:ltr"';
+function cloudErr(x){const c=x&&(x.code||x.message)||'';
+ if(/invalid-credential|wrong-password|user-not-found|invalid-email/.test(c))return'البريد أو كلمة المرور غير صحيحة';
+ if(/network|load/.test(c))return'لا يوجد اتصال بالإنترنت';if(c==='nodoc')return'لا توجد بيانات سحابية لهذا الحساب';if(c==='cfg')return'إعدادات Firebase غير صالحة';
+ if(/permission|insufficient/.test(c))return'قواعد Firestore تمنع الوصول. راجع الخطوة الخاصة بالقواعد';if(/weak-password/.test(c))return'كلمة المرور ضعيفة';
+ if(/operation-not-allowed|configuration-not-found/.test(c))return'فعّل تسجيل الدخول بالبريد وكلمة المرور في Firebase';
+ if(x&&x.name==='OperationError')return'تعذر فك التشفير: كلمة المرور لا تطابق بيانات السحابة';return'حدث خطأ: '+c}
+function done(){const au=$('au');au.style.display='none';au.innerHTML='';document.body.classList.remove('lk');render();scrollTo(0,0)}
+function showAuth(){document.body.classList.add('lk');const au=$('au'),has=!!localStorage.getItem(AK);au.style.display='flex';
+ au.innerHTML=`<form id="af" autocomplete="on"><h2>${has?'تسجيل الدخول':'إنشاء حساب'}</h2>
+ <p>${has?'ادخل اسم المستخدم (أو البريد) وكلمة المرور لفتح البيانات.':'بياناتك تُحفظ مشفّرة ولا يفتحها إلا صاحب كلمة المرور. لا يمكن استعادة كلمة المرور إذا نُسيت، فاحتفظ بنسخة احتياطية.'}</p>
+ <label>اسم المستخدم</label><input id="au1" autocomplete="username" required>
+ <label>كلمة المرور${has?'':' (8 أحرف على الأقل)'}</label><input id="au2" type="password" autocomplete="${has?'current-password':'new-password'}" required>
+ ${has?'':'<label>تأكيد كلمة المرور</label><input id="au3" type="password" autocomplete="new-password" required>'}
+ <div id="ae"></div><button type="submit">${has?'دخول':'إنشاء الحساب'}</button>
+ ${has?'<p style="text-align:center;margin-top:12px"><a href="#" id="fg" style="color:var(--ac)">نسيت كلمة المرور؟</a></p>':'<p style="text-align:center;margin-top:12px"><a href="#" id="jl" style="color:var(--ac)">لدي حساب سحابي على جوال آخر</a></p>'}</form>`;
+ $('af').onsubmit=async e=>{e.preventDefault();const er=$('ae'),btn=e.target.querySelector('[type=submit]'),u=$('au1').value,p=$('au2').value;er.textContent='';
+  try{
+   if(has){const f=failGet(),w=f.until-Date.now();if(w>0){er.textContent=`حاول بعد ${Math.ceil(w/1000)} ثانية`;return}
+    btn.disabled=true;er.textContent='جارٍ التحقق...';
+    try{await unlock(u,p);localStorage.removeItem(FK)}catch(x){const n=f.n+1;localStorage.setItem(FK,JSON.stringify({n,until:n>=5?Date.now()+30000*(n-4):0}));er.textContent='اسم المستخدم أو كلمة المرور غير صحيحة';btn.disabled=false;return}
+   }else{
+    if(p.length<8){er.textContent='كلمة المرور أقل من 8 أحرف';return}
+    if(p!==$('au3').value){er.textContent='كلمتا المرور غير متطابقتين';return}
+    if(!u.trim()){er.textContent='اكتب اسم المستخدم';return}
+    btn.disabled=true;er.textContent='جارٍ الإنشاء...';await setup(u,p)}
+   done();const f=getFB();if(f)authSecret(p,f.email).then(ap=>{AUTHPW=ap;startCloud()});
+  }catch(x){er.textContent='حدث خطأ، حاول مرة أخرى';btn.disabled=false}};
+ const fg=$('fg');if(fg)fg.onclick=e=>{e.preventDefault();if(confirm('سيتم مسح كل بيانات التطبيق من هذا الجهاز نهائيًا (وبيانات السحابة المشفّرة لن تُفتح بدون كلمة المرور). تستعيدها من ملف النسخة الاحتياطية. متابعة؟')){[AK,KEY,FK,FBK,'water_bn'].forEach(k=>localStorage.removeItem(k));clearSnaps();showAuth()}};
+ const jl=$('jl');if(jl)jl.onclick=e=>{e.preventDefault();showJoin()};
+ setTimeout(()=>{const x=$('au1');x&&x.focus()},50)}
+function showJoin(){const au=$('au'),f=getFB()||{};
+ au.innerHTML=`<form id="jf"><h2>الدخول من السحابة</h2><p>لإضافة هذا الجوال إلى حسابك الموجود على جوال آخر. الصق إعدادات Firebase نفسها وأدخل البريد وكلمة المرور نفسيهما.</p>
+ <label>إعدادات Firebase</label><textarea id="jc" rows="5" ${TA}>${esc(f.cfg?JSON.stringify(f.cfg):'')}</textarea>
+ <label>البريد الإلكتروني</label><input id="je" type="email" value="${esc(f.email||'')}" required><label>كلمة المرور</label><input id="jp" type="password" required>
+ <div id="ae"></div><button type="submit">دخول وتحميل البيانات</button><p style="text-align:center;margin-top:12px"><a href="#" id="jb" style="color:var(--ac)">رجوع</a></p></form>`;
+ $('jb').onclick=e=>{e.preventDefault();showAuth()};
+ $('jf').onsubmit=async e=>{e.preventDefault();const er=$('ae'),btn=e.target.querySelector('[type=submit]');btn.disabled=true;er.textContent='جارٍ الاتصال...';
+  try{let cfg;try{cfg=parseCfg($('jc').value)}catch(x){throw new Error('cfg')}
+   await joinCloud(cfg,$('je').value.trim().toLowerCase(),$('jp').value);listen();setCS('☁ متزامن');done();
+   alert('تم تحميل بياناتك. للدخول لاحقًا على هذا الجوال استخدم اسم المستخدم: '+UNAME+' (أو البريد الإلكتروني) ونفس كلمة المرور.')}
+  catch(x){er.textContent=cloudErr(x);btn.disabled=false}}}
+async function lockNow(){try{if(snapT){clearTimeout(snapT);snapT=null;await snapLocal()}if(DIRTY&&FU)await Promise.race([push(),new Promise(r=>setTimeout(r,4000))])}catch(x){}
+ await chain;stopCloud();try{if(window.firebase&&firebase.apps.length)await firebase.auth().signOut()}catch(x){}
+ AUTHPW='';KEYC=null;S=null;setCS('');$('list').innerHTML='';$('stage').innerHTML='';cl();showAuth()}
+let hidAt=0;document.addEventListener('visibilitychange',()=>{if(document.hidden){hidAt=Date.now();if(KEYC&&DIRTY&&FU)push()}else if(KEYC&&hidAt&&Date.now()-hidAt>300000)lockNow()});
+addEventListener('online',()=>{if(KEYC&&getFB()){if(FU)push();else startCloud()}});
+function clUI(){const f=getFB();
+ if(f)md(`<h3>المزامنة السحابية</h3><p>${esc(f.email)} — <b>${esc($('cs').textContent||'')}</b></p><p style="color:var(--mu);font-size:13px">كل تغيير يُرفع تلقائيًا ومشفّرًا. تجنّب التعديل من جوالين في نفس اللحظة.</p><div class="row"><button data-a="clnow">مزامنة الآن</button><button class="d" data-a="cloff">فصل المزامنة</button><button class="g" data-a="x">إغلاق</button></div>`);
+ else md(`<h3>ربط المزامنة السحابية</h3><p style="color:var(--mu);font-size:13px">الصق إعدادات Firebase، واكتب بريدًا (يمكن أن يكون وهميًا مثل ali@water.com) وكلمة مرور التطبيق الحالية.</p><label>إعدادات Firebase</label><textarea id="fc" rows="5" ${TA}></textarea>${fld('البريد الإلكتروني','fe','','email')}${fld('كلمة مرور التطبيق','fp','','password')}<div id="fer" class="warn"></div><div class="row"><button data-a="clok">ربط ورفع البيانات</button><button class="g" data-a="x">إلغاء</button></div>`)}
+async function bksUI(){const L=[];
+ for(let i=0;i<BKN;i++){const r=localStorage.getItem('water_bk_'+i);if(!r)continue;try{const o=JSON.parse(r);L.push({src:'جوال',t:o.t,st:await decObj(o)})}catch(x){}}
+ if(FU&&DB){try{const q=await DB.collection(`users/${FU.uid}/bk`).get();for(const d of q.docs){const o=d.data();try{L.push({src:'سحابة',t:o.t,st:await decObj(o)})}catch(x){}}}catch(x){}}
+ L.sort((a,b)=>b.t-a.t);window._bk=L;
+ md(`<h3>النسخ الاحتياطية التلقائية</h3><p style="color:var(--mu);font-size:13px">تُحفظ نسخة بعد كل تغيير (آخر ${BKN} على الجوال${FU?' و'+CBKN+' في السحابة':''}).</p>${L.map((x,i)=>`<div class="pl"><span>${new Date(x.t).toLocaleString('ar-u-ca-gregory')}<br><small style="color:var(--mu)">${x.src} · ${esc(x.st.month)} ${x.st.year} · ${x.st.c.length} عميل · ${x.st.pays.length} دفعة</small></span><button class="g" data-a="bkr" data-i="${i}">استرجاع</button></div>`).join('')||'<p>لا توجد نسخ بعد</p>'}<div class="row"><button class="g" data-a="x">إغلاق</button></div>`)}
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+ if(a==='lock')lockNow();
+ else if(a==='pw'){if(getFB())return alert('تغيير كلمة المرور غير متاح أثناء ربط المزامنة حاليًا.');
+  md(`<h3>تغيير كلمة المرور</h3>${fld('كلمة المرور الحالية','po','','password')}${fld('كلمة المرور الجديدة (8 أحرف على الأقل)','pn','','password')}${fld('تأكيد الجديدة','pc','','password')}<div id="pe" class="warn"></div><div class="row"><button data-a="pwok">حفظ</button><button class="g" data-a="x">إلغاء</button></div>`)}
+ else if(a==='pwok'){const o=$('po').value,n=$('pn').value,c=$('pc').value,er=$('pe');if(n.length<8)return er.textContent='الجديدة أقل من 8 أحرف';if(n!==c)return er.textContent='التأكيد غير مطابق';
+  er.textContent='جارٍ الحفظ...';try{await changePw(o,n);cl();alert('تم تغيير كلمة المرور')}catch(x){er.textContent='كلمة المرور الحالية غير صحيحة'}}
+ else if(a==='cl')clUI();
+ else if(a==='clok'){const er=$('fer');let cfg;try{cfg=parseCfg($('fc').value)}catch(x){return er.textContent='إعدادات Firebase غير صالحة'}
+  const em=$('fe').value.trim().toLowerCase(),pw=$('fp').value;if(!em||!pw)return er.textContent='اكتب البريد وكلمة المرور';
+  b.disabled=true;er.textContent='جارٍ الربط...';
+  try{let r=await enableCloud(cfg,em,pw,false);
+   if(r==='exists'){if(!confirm('يوجد بيانات سحابية سابقة لهذا الحساب. هل تستبدلها ببيانات هذا الجوال؟ (آخر 30 نسخة سابقة تبقى في النسخ التلقائية السحابية)')){b.disabled=false;er.textContent='';return}r=await enableCloud(cfg,em,pw,true)}
+   cl();toast('تم الربط وبدأت المزامنة')}
+  catch(x){er.textContent=cloudErr(x);b.disabled=false}}
+ else if(a==='clnow'){cl();if(FU)push();else startCloud();toast('جارٍ المزامنة...')}
+ else if(a==='cloff'){if(confirm('فصل المزامنة؟ تبقى البيانات على هذا الجوال وفي السحابة.')){stopCloud();localStorage.removeItem(FBK);EM='';persist();setCS('');try{firebase.auth().signOut()}catch(x){}cl()}}
+ else if(a==='bks')bksUI();
+ else if(a==='bkr'){const x=window._bk&&window._bk[+b.dataset.i];if(!x||!confirm('استرجاع هذه النسخة؟ تُحفظ الحالة الحالية كنسخة قبل الاستبدال.'))return;await snapLocal();S={...x.st,hist:S.hist||[]};save();cl();render();toast('تم الاسترجاع')}});
+if(!(window.crypto&&crypto.subtle)){document.body.innerHTML='<p style="padding:30px;text-align:center">يتطلب التطبيق اتصالًا آمنًا (https). افتحه من الرابط الرسمي.</p>'}else showAuth();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
